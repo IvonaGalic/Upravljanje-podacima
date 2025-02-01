@@ -1,0 +1,35 @@
+version: "3.7"
+services:
+  bp2025:
+    build: .
+    container_name: bp2025
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - bpnet
+    restart: always
+  redis:
+    image: redis
+    container_name: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - bpnet
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      - MYSQL_DATABASE=stvaridb
+      - MYSQL_ROOT_PASSWORD=Lozinka123
+    volumes:
+      - mysql:/var/lib/mysql
+    networks:
+      - bpnet
+volumes:
+  mysql:
+networks:
+  bpnet:
+    driver: bridge
